@@ -1,0 +1,59 @@
+@import "tailwindcss";
+@import "@halleyfante/amber/tokens.css";
+@import "@halleyfante/amber/themes/dark.css";
+@import "@halleyfante/amber/themes/light.css";
+
+/* ==============================
+   Global Base Styles
+   ============================== */
+body {
+  font-family: var(--font-family-body);
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-normal);
+  transition:
+    background-color 250ms,
+    color 250ms;
+}
+
+code,
+pre {
+  font-family: var(--font-family-monospace);
+}
+
+pre {
+  background-color: var(--color-code-background);
+  color: var(--color-code-text);
+  padding: var(--spacing-medium);
+  border-radius: var(--border-radius-medium);
+  overflow-x: auto;
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-relaxed);
+}
+
+code:not(pre code) {
+  background-color: var(--color-code-background);
+  color: var(--color-code-text);
+  padding: var(--spacing-extra-small) var(--spacing-small);
+  border-radius: var(--border-radius-small);
+  font-size: 0.9em;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color 150ms;
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+}

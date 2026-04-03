@@ -1,0 +1,29 @@
+{
+  "name": "letters",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/halleyfante/letters.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/halleyfante/letters/issues"
+  },
+  "homepage": "https://github.com/halleyfante/letters#readme",
+  "dependencies": {
+    "@astrojs/mdx": "^5.0.2",
+    "@astrojs/sitemap": "^3.7.1",
+    "@halleyfante/amber": "file:../amber",
+    "@tailwindcss/vite": "^4.2.2",
+    "astro": "^6.0.8",
+    "tailwindcss": "^4.2.2"
+  }
+}

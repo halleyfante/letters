@@ -1,0 +1,145 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import { topicLabels } from "../config/topics";
+import { letterTexts, author } from "../config/letter";
+
+
+interface Props {
+  title: string;
+  description: string;
+  topic: string;
+  language: "pt" | "en";
+  publishedDate: Date;
+  updatedDate?: Date;
+}
+
+const { title, description, topic, language = "pt", publishedDate, updatedDate } = Astro.props;
+
+const { greeting, closing } = letterTexts[language];
+
+const formattedPublishedDate = publishedDate.toLocaleDateString("pt-BR", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const formattedUpdatedDate = updatedDate?.toLocaleDateString("pt-BR", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  breadcrumb={[
+    { label: "home", href: import.meta.env.BASE_URL },
+    { label: (topicLabels[topic] || topic).toLowerCase(), href: `${import.meta.env.BASE_URL}${topic}` },
+    { label: title.toLowerCase() }
+  ]}
+>
+  <article class="post-article">
+    <header class="post-header">
+      <h1 class="post-title">{title}</h1>
+      <div class="post-metadata">
+        <time datetime={publishedDate.toISOString()}>
+          {formattedPublishedDate}
+        </time>
+        {formattedUpdatedDate && (
+          <span class="post-updated">
+            · atualizado em {formattedUpdatedDate}
+          </span>
+        )}
+      </div>
+    </header>
+    <div class="post-content">
+      <p class="letter-greeting">{greeting}</p>
+      <slot />
+      <footer class="letter-signature">
+        <p>{closing} {author}.</p>
+      </footer>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .post-article {
+    max-width: 100%;
+  }
+
+  .post-header {
+    margin-bottom: var(--spacing-extra-large);
+  }
+
+  .post-topic-link {
+    font-size: var(--font-size-small);
+    text-transform: lowercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent);
+  }
+
+  .post-title {
+    font-size: var(--font-size-huge);
+    margin: var(--spacing-small) 0 var(--spacing-medium);
+  }
+
+  .post-metadata {
+    font-size: var(--font-size-small);
+    color: var(--color-text-muted);
+  }
+
+  .post-updated {
+    color: var(--color-text-muted);
+  }
+
+  .post-content {
+    font-size: var(--font-size-medium);
+    line-height: var(--line-height-relaxed);
+    text-align: justify;
+  }
+
+  .post-content :global(h2) {
+    font-size: var(--font-size-extra-large);
+    margin-top: var(--spacing-huge);
+    margin-bottom: var(--spacing-medium);
+  }
+
+  .post-content :global(h3) {
+    font-size: var(--font-size-large);
+    margin-top: var(--spacing-extra-large);
+    margin-bottom: var(--spacing-medium);
+  }
+
+  .post-content :global(p) {
+    margin-bottom: var(--spacing-medium);
+  }
+
+  .post-content :global(pre) {
+    margin-bottom: var(--spacing-large);
+  }
+
+  .post-content :global(ul),
+  .post-content :global(ol) {
+    margin-bottom: var(--spacing-medium);
+    padding-left: var(--spacing-large);
+  }
+
+  .post-content :global(li) {
+    margin-bottom: var(--spacing-small);
+  }
+
+  .post-content :global(blockquote) {
+    border-left: 3px solid var(--color-accent);
+    padding-left: var(--spacing-large);
+    margin: var(--spacing-large) 0;
+    color: var(--color-text-secondary);
+    font-style: italic;
+  }
+
+  .post-content :global(sup) {
+    font-size: inherit;
+    vertical-align: baseline;
+    line-height: inherit;
+  }
+</style>

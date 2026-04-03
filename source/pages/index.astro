@@ -1,0 +1,30 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import TopicSection from "../components/TopicSection.astro";
+
+import { topicLabels, topicOrder } from "../config/topics";
+
+const allPosts = await getCollection("posts", ({ data }) => !data.draft);
+
+const sortedPosts = allPosts.sort(
+  (first, second) =>
+    second.data.publishedDate.valueOf() - first.data.publishedDate.valueOf(),
+);
+
+const postsByTopic = topicOrder
+  .map((topic) => ({
+    topic,
+    label: topicLabels[topic] || topic,
+    posts: sortedPosts
+      .filter((post) => post.data.topic === topic)
+      .slice(0, 3),
+  }))
+  .filter((group) => group.posts.length > 0);
+---
+
+<BaseLayout title="Letters" description="Letters from HalleyFante">
+  {postsByTopic.map((group) => (
+    <TopicSection topic={group.topic} label={group.label} posts={group.posts} />
+  ))}
+</BaseLayout>

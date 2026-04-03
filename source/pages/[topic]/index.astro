@@ -1,0 +1,126 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { topicLabels } from "../../config/topics";
+
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection("posts", ({ data }) => !data.draft);
+  const topics = [...new Set(allPosts.map((post) => post.data.topic))];
+
+  return topics.map((topic) => ({
+    params: { topic },
+    props: {
+      posts: allPosts
+        .filter((post) => post.data.topic === topic)
+        .sort(
+          (first, second) =>
+            second.data.publishedDate.valueOf() -
+            first.data.publishedDate.valueOf(),
+        ),
+    },
+  }));
+}
+
+const { topic } = Astro.params;
+const { posts } = Astro.props;
+const topicLabel = topicLabels[topic!] || topic;
+---
+
+<BaseLayout
+  title={`${topicLabel} — Notes`}
+  description={`Todos os posts sobre ${topicLabel}`}
+  breadcrumb={[
+    { label: "home", href: import.meta.env.BASE_URL },
+    { label: topicLabel?.toLowerCase() || "" }
+  ]}
+>
+  <section class="topic-page">
+    <h1 class="topic-heading">{topicLabel}</h1>
+    <ul class="post-list">
+      {posts.map((post) => {
+        const slugParts = post.id.split("/");
+        const slug = slugParts[slugParts.length - 1];
+        const formattedDate = post.data.publishedDate.toLocaleDateString("pt-BR", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
+
+        return (
+          <li class="post-list-item">
+            <a
+              href={`${import.meta.env.BASE_URL}${post.data.topic}/${slug}`}
+              class="post-link"
+            >
+              <span class="post-link-title">{post.data.title}</span>
+              <span class="post-link-description">{post.data.description}</span>
+            </a>
+            <time
+              class="post-link-date"
+              datetime={post.data.publishedDate.toISOString()}
+            >
+              {formattedDate}
+            </time>
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .topic-page {
+    max-width: 100%;
+  }
+
+  .topic-heading {
+    font-size: var(--font-size-huge);
+    margin-bottom: var(--spacing-extra-large);
+  }
+
+  .post-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-large);
+  }
+
+  .post-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--spacing-medium);
+    padding-bottom: var(--spacing-large);
+    border-bottom: var(--border-width-thin) solid var(--color-border);
+  }
+
+  .post-link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-extra-small);
+  }
+
+  .post-link-title {
+    font-size: var(--font-size-medium);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    transition: color 150ms;
+  }
+
+  .post-link:hover .post-link-title {
+    color: var(--color-accent);
+  }
+
+  .post-link-description {
+    font-size: var(--font-size-small);
+    color: var(--color-text-secondary);
+  }
+
+  .post-link-date {
+    font-size: var(--font-size-small);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+</style>

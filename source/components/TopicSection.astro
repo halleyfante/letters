@@ -1,0 +1,64 @@
+---
+import type { CollectionEntry } from "astro:content";
+import PostCard from "./PostCard.astro";
+
+interface Props {
+  topic: string;
+  label: string;
+  posts: CollectionEntry<"posts">[];
+}
+
+const { topic, label, posts } = Astro.props;
+---
+
+<section class="topic-section">
+  <div class="topic-section-header">
+    <h2 class="topic-section-heading">{label}</h2>
+    <a
+      href={`${import.meta.env.BASE_URL}${topic}`}
+      class="topic-section-see-all"
+    >
+      ver todos &rarr;
+    </a>
+  </div>
+  <ul class="topic-section-list">
+    {posts.map((post) => <PostCard post={post} />)}
+  </ul>
+</section>
+
+<style>
+  .topic-section {
+    margin-bottom: var(--spacing-huge);
+  }
+
+  .topic-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: var(--spacing-medium);
+    padding-bottom: var(--spacing-small);
+    border-bottom: var(--border-width-thin) solid var(--color-border);
+  }
+
+  .topic-section-heading {
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .topic-section-see-all {
+    font-size: var(--font-size-small);
+    color: var(--color-text-muted);
+  }
+
+  .topic-section-see-all:hover {
+    color: var(--color-accent);
+  }
+
+  .topic-section-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-small);
+  }
+</style>

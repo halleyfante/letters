@@ -1,0 +1,57 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  post: CollectionEntry<"posts">;
+}
+
+const { post } = Astro.props;
+
+const slugParts = post.id.split("/");
+const slug = slugParts[slugParts.length - 1];
+
+const formattedDate = post.data.publishedDate.toLocaleDateString("pt-BR", {
+  month: "short",
+  day: "numeric",
+});
+---
+
+<li class="post-card-item">
+  <a
+    href={`${import.meta.env.BASE_URL}${post.data.topic}/${slug}`}
+    class="post-card-link"
+  >
+    {post.data.title}
+  </a>
+  <time
+    class="post-card-date"
+    datetime={post.data.publishedDate.toISOString()}
+  >
+    {formattedDate}
+  </time>
+</li>
+
+<style>
+  .post-card-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--spacing-medium);
+  }
+
+  .post-card-link {
+    font-size: var(--font-size-base);
+    color: var(--color-text-primary);
+    transition: color 150ms;
+  }
+
+  .post-card-link:hover {
+    color: var(--color-accent);
+  }
+
+  .post-card-date {
+    font-size: var(--font-size-small);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+</style>
