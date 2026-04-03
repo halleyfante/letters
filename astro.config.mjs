@@ -6,6 +6,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   site: "https://letters.halleyfante.com",
   srcDir: "./source",
+  outDir: "./distribution",
   output: "static",
   integrations: [mdx(), sitemap()],
   vite: {
