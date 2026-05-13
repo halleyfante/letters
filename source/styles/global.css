@@ -1,16 +1,16 @@
 @import "tailwindcss";
 @import "@halleyfante/amber/tokens.css";
-@import "@halleyfante/amber/themes/dark.css";
-@import "@halleyfante/amber/themes/light.css";
+@import "@halleyfante/amber/themes/darling.css";
+@import "@halleyfante/amber/themes/honey.css";
 
 /* ==============================
    Global Base Styles
    ============================== */
 body {
-  font-family: var(--font-family-body);
-  background-color: var(--color-background);
-  color: var(--color-text-primary);
-  line-height: var(--line-height-normal);
+  font-family: var(--amber-font-family-body);
+  background-color: var(--amber-color-background);
+  color: var(--amber-color-text-primary);
+  line-height: var(--amber-line-height-normal);
   transition:
     background-color 250ms,
     color 250ms;
@@ -18,42 +18,42 @@ body {
 
 code,
 pre {
-  font-family: var(--font-family-monospace);
+  font-family: var(--amber-font-family-monospace);
 }
 
 pre {
-  background-color: var(--color-code-background);
-  color: var(--color-code-text);
-  padding: var(--spacing-medium);
-  border-radius: var(--border-radius-medium);
+  background-color: var(--amber-color-code-background);
+  color: var(--amber-color-code-text);
+  padding: var(--amber-spacing-medium);
+  border-radius: var(--amber-border-radius-medium);
   overflow-x: auto;
-  font-size: var(--font-size-small);
-  line-height: var(--line-height-relaxed);
+  font-size: var(--amber-font-size-small);
+  line-height: var(--amber-line-height-relaxed);
 }
 
 code:not(pre code) {
-  background-color: var(--color-code-background);
-  color: var(--color-code-text);
-  padding: var(--spacing-extra-small) var(--spacing-small);
-  border-radius: var(--border-radius-small);
+  background-color: var(--amber-color-code-background);
+  color: var(--amber-color-code-text);
+  padding: var(--amber-spacing-extra-small) var(--amber-spacing-small);
+  border-radius: var(--amber-border-radius-small);
   font-size: 0.9em;
 }
 
 a {
-  color: var(--color-accent);
+  color: var(--amber-color-accent);
   text-decoration: none;
   transition: color 150ms;
 }
 
 a:hover {
-  color: var(--color-accent-hover);
+  color: var(--amber-color-accent-hover);
 }
 
 h1,
 h2,
 h3,
 h4 {
-  font-family: var(--font-family-heading);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-tight);
+  font-family: var(--amber-font-family-heading);
+  font-weight: var(--amber-font-weight-bold);
+  line-height: var(--amber-line-height-tight);
 }

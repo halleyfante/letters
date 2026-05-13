@@ -24,42 +24,56 @@
   .theme-toggle {
     background: none;
     border: none;
-    padding: var(--spacing-extra-small);
+    padding: var(--amber-spacing-extra-small);
     cursor: pointer;
-    color: var(--color-text-secondary);
+    color: var(--amber-color-text-secondary);
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--border-radius-small);
+    border-radius: var(--amber-border-radius-small);
     transition: color 150ms;
   }
 
   .theme-toggle:hover {
-    color: var(--color-accent);
+    color: var(--amber-color-accent);
   }
 
   .theme-icon-sun {
     display: none;
   }
 
-  :global([data-theme="light"]) .theme-icon-sun {
+  :global([data-theme="honey"]) .theme-icon-sun {
     display: block;
   }
 
-  :global([data-theme="light"]) .theme-icon-moon {
+  :global([data-theme="honey"]) .theme-icon-moon {
     display: none;
   }
 </style>
 
 <script>
-  import { Theme, configure, get, set, ThemeLocalStorage } from "@halleyfante/amber/theme";
+  import {
+    Theme,
+    ThemeManager,
+    ThemeLocalStorage,
+    DocumentRenderer,
+    MediaQueryPreference,
+  } from "@halleyfante/amber/theme";
+  import { THEME_KEY } from "../constants";
 
-  configure({ storage: new ThemeLocalStorage("theme-preference") });
+  const renderer = new DocumentRenderer();
+  const manager = new ThemeManager(
+    new ThemeLocalStorage(THEME_KEY),
+    renderer,
+    new MediaQueryPreference(),
+  );
+
+  renderer.paint(manager.get().theme);
 
   const themeToggleButton = document.getElementById("theme-toggle-button");
 
   themeToggleButton?.addEventListener("click", () => {
-    const { theme } = get();
-    set(theme === Theme.Light ? Theme.Dark : Theme.Light);
+    const { theme } = manager.get();
+    manager.activate(theme === Theme.Honey ? Theme.Darling : Theme.Honey);
   });
 </script>

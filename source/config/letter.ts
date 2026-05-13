@@ -9,4 +9,4 @@ export const letterTexts: Record<string, { greeting: string; closing: string }> 
   },
 };
 
-export const author = "HalleyFante";
+export const author = "Halleyfante";
