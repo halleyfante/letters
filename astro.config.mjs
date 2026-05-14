@@ -1,7 +1,6 @@
 import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
-import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   site: "https://letters.halleyfante.com",
@@ -9,7 +8,4 @@ export default defineConfig({
   outDir: "./distribution",
   output: "static",
   integrations: [mdx(), sitemap()],
-  vite: {
-    plugins: [tailwindcss()],
-  },
 });

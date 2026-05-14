@@ -24,7 +24,27 @@ const postsByTopic = topicOrder
 ---
 
 <BaseLayout title="Letters" description="Letters from HalleyFante">
+  <div class="author-portrait">
+    <amber-self-portrait variant="pix" caption="@halleyfante" badge></amber-self-portrait>
+  </div>
+
   {postsByTopic.map((group) => (
     <TopicSection topic={group.topic} label={group.label} posts={group.posts} />
   ))}
 </BaseLayout>
+
+<script>
+  import { defineCustomElement } from "@halleyfante/amber/sdk/amber-self-portrait";
+  defineCustomElement();
+</script>
+
+<style>
+  .author-portrait {
+    display: flex;
+    justify-content: center;
+  }
+
+  .author-portrait amber-self-portrait {
+    --amber-self-portrait-size: 14rem;
+  }
+</style>

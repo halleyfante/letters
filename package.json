@@ -22,8 +22,6 @@
     "@astrojs/mdx": "^5.0.2",
     "@astrojs/sitemap": "^3.7.1",
     "@halleyfante/amber": "0.1.0-alpha.0",
-    "@tailwindcss/vite": "^4.2.2",
-    "astro": "^6.0.8",
-    "tailwindcss": "^4.2.2"
+    "astro": "^6.0.8"
   }
 }
