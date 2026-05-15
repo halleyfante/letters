@@ -24,8 +24,13 @@ const postsByTopic = topicOrder
 ---
 
 <BaseLayout title="Letters" description="Letters from HalleyFante">
-  <div class="author-portrait">
-    <amber-self-portrait variant="pix" caption="@halleyfante" badge></amber-self-portrait>
+  <div class="presentation">
+    <div class="author-portrait">
+      <amber-self-portrait variant="pix" caption="@halleyfante" badge></amber-self-portrait>
+    </div>
+    <p class="description">
+      Em tempo em que qualquer fala pode dar lugar à problematização, ainda que nada de grave nela se diga, expressar uma ideia não deveria ser problema, quando o que se busca por seu meio é a reflexão.
+    </p>
   </div>
 
   {postsByTopic.map((group) => (
@@ -39,12 +44,28 @@ const postsByTopic = topicOrder
 </script>
 
 <style>
-  .author-portrait {
+  .presentation {
     display: flex;
-    justify-content: center;
+    align-items: stretch;
+    gap: var(--amber-spacing-large);
   }
 
   .author-portrait amber-self-portrait {
     --amber-self-portrait-size: 14rem;
+  }
+
+  .description {
+    flex: 1;
+    margin: 0;
+    padding: var(--amber-spacing-large);
+    background-color: var(--amber-color-background-secondary);
+    border: var(--amber-border-width-thin) solid var(--amber-color-border);
+    border-radius: var(--amber-border-radius-medium);
+    display: flex;
+    align-items: center;
+    font-size: var(--amber-font-size-medium);
+    line-height: var(--amber-line-height-relaxed);
+    text-align: justify;
+    hyphens: auto;
   }
 </style>
