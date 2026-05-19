@@ -1,0 +1,43 @@
+---
+interface Properties {
+  label: string;
+  topic?: string;
+  active?: boolean;
+}
+
+const { label, topic, active = false } = Astro.props as Properties;
+---
+
+<button
+  type="button"
+  class:list={["tag", { "is-active": active }]}
+  data-topic={topic}
+  aria-pressed={active ? "true" : "false"}
+>
+  {label}
+</button>
+
+<style>
+  .tag {
+    appearance: none;
+    font: inherit;
+    font-size: var(--amber-font-size-small);
+    color: var(--amber-color-text-muted);
+    background-color: var(--amber-color-background-secondary);
+    border: var(--amber-border-width-thin) solid var(--amber-color-border);
+    border-radius: var(--amber-border-radius-medium);
+    padding: var(--amber-spacing-extra-small) var(--amber-spacing-small);
+    cursor: pointer;
+    transition: color 150ms, border-color 150ms;
+  }
+
+  .tag:hover {
+    color: var(--amber-color-accent);
+    border-color: var(--amber-color-accent);
+  }
+
+  .tag.is-active {
+    color: var(--amber-color-accent);
+    border-color: var(--amber-color-accent);
+  }
+</style>

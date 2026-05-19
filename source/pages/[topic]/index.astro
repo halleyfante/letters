@@ -1,7 +1,9 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { topicLabels } from "../../config/topics";
+import { translateCapitalized } from "../../configuration/internationalization/translate";
+import { formatDate } from "../../configuration/date";
+import { byDateDescending, getSlug } from "../../configuration/posts";
 
 
 export async function getStaticPaths() {
@@ -13,39 +15,30 @@ export async function getStaticPaths() {
     props: {
       posts: allPosts
         .filter((post) => post.data.topic === topic)
-        .sort(
-          (first, second) =>
-            second.data.publishedDate.valueOf() -
-            first.data.publishedDate.valueOf(),
-        ),
+        .sort(byDateDescending),
     },
   }));
 }
 
 const { topic } = Astro.params;
 const { posts } = Astro.props;
-const topicLabel = topicLabels[topic!] || topic;
+const topicLabel = translateCapitalized(topic!);
 ---
 
 <BaseLayout
-  title={`${topicLabel} — Notes`}
+  title={topicLabel}
   description={`Todos os posts sobre ${topicLabel}`}
   breadcrumb={[
     { label: "home", href: import.meta.env.BASE_URL },
-    { label: topicLabel?.toLowerCase() || "" }
+    { label: topicLabel }
   ]}
 >
   <section class="topic-page">
     <h1 class="topic-heading">{topicLabel}</h1>
     <ul class="post-list">
       {posts.map((post) => {
-        const slugParts = post.id.split("/");
-        const slug = slugParts[slugParts.length - 1];
-        const formattedDate = post.data.publishedDate.toLocaleDateString("pt-BR", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        });
+        const slug = getSlug(post);
+        const formattedDate = formatDate(post.data.publishedDate);
 
         return (
           <li class="post-list-item">

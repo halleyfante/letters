@@ -1,0 +1,133 @@
+---
+import { translateCapitalized } from "../configuration/internationalization/translate";
+import type { PostListItem } from "../configuration/posts";
+import Tag from "./Tag.astro";
+
+interface Properties {
+  posts: PostListItem[];
+  topics: string[];
+}
+
+const { posts, topics } = Astro.props as Properties;
+---
+
+<section class="post-list">
+  <nav class="post-list-filter" aria-label="Filtrar por tópico">
+    {topics.map((topic) => (
+      <Tag label={translateCapitalized(topic)} topic={topic} />
+    ))}
+  </nav>
+
+  <script
+    type="application/json"
+    data-post-list-data
+    set:html={JSON.stringify(posts)}
+  />
+
+  <ul class="post-list-feed" data-post-list-feed></ul>
+</section>
+
+<script>
+  import type { PostListItem } from "../configuration/posts";
+
+  document.querySelectorAll<HTMLElement>(".post-list").forEach((listElement) => {
+    const dataElement = listElement.querySelector<HTMLScriptElement>(
+      "[data-post-list-data]",
+    );
+    const feedElement = listElement.querySelector<HTMLUListElement>(
+      "[data-post-list-feed]",
+    );
+    const buttons = listElement.querySelectorAll<HTMLButtonElement>(".tag");
+
+    if (!dataElement || !feedElement) return;
+
+    const posts = JSON.parse(dataElement.textContent ?? "[]") as PostListItem[];
+    let activeTopic: string | null = null;
+
+    const renderItem = (post: PostListItem) => {
+      const item = document.createElement("li");
+      item.className = "post-list-item";
+      item.dataset.topic = post.topic;
+
+      const link = document.createElement("a");
+      link.className = "post-list-item-link";
+      link.href = post.url;
+      link.textContent = post.title;
+
+      const time = document.createElement("time");
+      time.className = "post-list-item-date";
+      time.dateTime = post.publishedDate;
+      time.textContent = post.publishedDate;
+
+      item.append(link, time);
+      return item;
+    };
+
+    const render = () => {
+      const filtered =
+        activeTopic === null
+          ? posts
+          : posts.filter((post) => post.topic === activeTopic);
+      feedElement.replaceChildren(...filtered.map(renderItem));
+
+      buttons.forEach((button) => {
+        const isActive = button.dataset.topic === activeTopic;
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+      });
+    };
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const topic = button.dataset.topic ?? null;
+        activeTopic = activeTopic === topic ? null : topic;
+        render();
+      });
+    });
+
+    render();
+  });
+</script>
+
+<style>
+  .post-list-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--amber-spacing-medium);
+    margin-bottom: var(--amber-spacing-large);
+    padding-bottom: var(--amber-spacing-medium);
+    border-bottom: var(--amber-border-width-thin) solid var(--amber-color-border);
+  }
+
+  .post-list-feed {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--amber-spacing-medium);
+  }
+
+  .post-list-feed :global(.post-list-item) {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--amber-spacing-medium);
+  }
+
+  .post-list-feed :global(.post-list-item-link) {
+    font-size: var(--amber-font-size-base);
+    color: var(--amber-color-text-primary);
+    transition: color 150ms;
+  }
+
+  .post-list-feed :global(.post-list-item-link:hover) {
+    color: var(--amber-color-accent);
+  }
+
+  .post-list-feed :global(.post-list-item-date) {
+    font-size: var(--amber-font-size-small);
+    color: var(--amber-color-text-muted);
+    white-space: nowrap;
+  }
+</style>

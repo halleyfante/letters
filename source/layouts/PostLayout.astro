@@ -1,33 +1,27 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
-import { topicLabels } from "../config/topics";
-import { letterTexts, author } from "../config/letter";
+import { translate, translateCapitalized, defaultLanguage } from "../configuration/internationalization/translate";
+import { formatDate } from "../configuration/date";
 
+const author = "Halleyfante";
 
 interface Props {
   title: string;
   description: string;
   topic: string;
-  language: "pt" | "en";
+  language: string;
   publishedDate: Date;
   updatedDate?: Date;
 }
 
-const { title, description, topic, language = "pt", publishedDate, updatedDate } = Astro.props;
+const { title, description, topic, language = defaultLanguage, publishedDate, updatedDate } = Astro.props;
 
-const { greeting, closing } = letterTexts[language];
+const greeting = `${translateCapitalized("dear", language)} ${translate("human", language)},`;
+const closing = `${translateCapitalized("sincerely", language)},`;
+const topicLabel = translateCapitalized(topic, language);
 
-const formattedPublishedDate = publishedDate.toLocaleDateString("pt-BR", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
-
-const formattedUpdatedDate = updatedDate?.toLocaleDateString("pt-BR", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
+const formattedPublishedDate = formatDate(publishedDate);
+const formattedUpdatedDate = updatedDate ? formatDate(updatedDate) : undefined;
 ---
 
 <BaseLayout
@@ -35,8 +29,8 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString("pt-BR", {
   description={description}
   breadcrumb={[
     { label: "home", href: import.meta.env.BASE_URL },
-    { label: (topicLabels[topic] || topic).toLowerCase(), href: `${import.meta.env.BASE_URL}${topic}` },
-    { label: title.toLowerCase() }
+    { label: topicLabel, href: `${import.meta.env.BASE_URL}${topic}` },
+    { label: title }
   ]}
 >
   <article class="post-article">

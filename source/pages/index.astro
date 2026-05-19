@@ -1,26 +1,22 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import TopicSection from "../components/TopicSection.astro";
-
-import { topicLabels, topicOrder } from "../config/topics";
+import PostList from "../components/PostList.astro";
+import { formatDate } from "../configuration/date";
+import { byDateDescending, getSlug } from "../configuration/posts";
 
 const allPosts = await getCollection("posts", ({ data }) => !data.draft);
 
-const sortedPosts = allPosts.sort(
-  (first, second) =>
-    second.data.publishedDate.valueOf() - first.data.publishedDate.valueOf(),
-);
+const sortedPosts = allPosts.sort(byDateDescending);
 
-const postsByTopic = topicOrder
-  .map((topic) => ({
-    topic,
-    label: topicLabels[topic] || topic,
-    posts: sortedPosts
-      .filter((post) => post.data.topic === topic)
-      .slice(0, 3),
-  }))
-  .filter((group) => group.posts.length > 0);
+const topics = [...new Set(allPosts.map((post) => post.data.topic))].sort();
+
+const postListItems = sortedPosts.map((post) => ({
+  title: post.data.title,
+  topic: post.data.topic,
+  url: `${import.meta.env.BASE_URL}${post.data.topic}/${getSlug(post)}`,
+  publishedDate: formatDate(post.data.publishedDate),
+}));
 ---
 
 <BaseLayout title="Letters" description="Letters from HalleyFante">
@@ -33,9 +29,7 @@ const postsByTopic = topicOrder
     </p>
   </div>
 
-  {postsByTopic.map((group) => (
-    <TopicSection topic={group.topic} label={group.label} posts={group.posts} />
-  ))}
+  <PostList posts={postListItems} topics={topics} />
 </BaseLayout>
 
 <script>
@@ -48,6 +42,7 @@ const postsByTopic = topicOrder
     display: flex;
     align-items: stretch;
     gap: var(--amber-spacing-large);
+    margin-bottom: var(--amber-spacing-extra-large);
   }
 
   .author-portrait amber-self-portrait {

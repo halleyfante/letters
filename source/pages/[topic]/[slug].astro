@@ -1,22 +1,18 @@
 ---
 import { getCollection, render } from "astro:content";
 import PostLayout from "../../layouts/PostLayout.astro";
+import { getSlug } from "../../configuration/posts";
 
 export async function getStaticPaths() {
   const allPosts = await getCollection("posts", ({ data }) => !data.draft);
 
-  return allPosts.map((post) => {
-    const slugParts = post.id.split("/");
-    const slug = slugParts[slugParts.length - 1];
-
-    return {
-      params: {
-        topic: post.data.topic,
-        slug: slug,
-      },
-      props: { post },
-    };
-  });
+  return allPosts.map((post) => ({
+    params: {
+      topic: post.data.topic,
+      slug: getSlug(post),
+    },
+    props: { post },
+  }));
 }
 
 const { post } = Astro.props;
