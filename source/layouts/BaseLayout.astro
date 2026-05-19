@@ -48,4 +48,10 @@ const { title, description, breadcrumb } = Astro.props;
     margin: 0 auto;
     padding: var(--amber-spacing-extra-large) var(--amber-spacing-large);
   }
+
+  @media (max-width: 640px) {
+    .site-main {
+      padding: var(--amber-spacing-large) var(--amber-spacing-medium);
+    }
+  }
 </style>

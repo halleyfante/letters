@@ -45,6 +45,7 @@ const { items } = Astro.props;
     display: flex;
     align-items: center;
     gap: var(--amber-spacing-small);
+    min-width: 0;
   }
 
   .breadcrumb a {
@@ -62,5 +63,15 @@ const { items } = Astro.props;
 
   .breadcrumb-current {
     color: var(--amber-color-accent);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
+
+  @media (max-width: 640px) {
+    .breadcrumb {
+      font-size: var(--amber-font-size-small);
+    }
   }
 </style>

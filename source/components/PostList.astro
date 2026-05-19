@@ -110,9 +110,10 @@ const { posts, topics } = Astro.props as Properties;
 
   .post-list-feed :global(.post-list-item) {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: baseline;
-    gap: var(--amber-spacing-medium);
+    gap: var(--amber-spacing-extra-small) var(--amber-spacing-medium);
   }
 
   .post-list-feed :global(.post-list-item-link) {

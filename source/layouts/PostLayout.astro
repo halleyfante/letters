@@ -136,4 +136,34 @@ const formattedUpdatedDate = updatedDate ? formatDate(updatedDate) : undefined;
     vertical-align: baseline;
     line-height: inherit;
   }
+
+  @media (max-width: 640px) {
+    .post-title {
+      font-size: var(--amber-font-size-extra-large);
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    .post-content {
+      font-size: var(--amber-font-size-base);
+      text-align: left;
+    }
+
+    .post-content :global(h2) {
+      font-size: var(--amber-font-size-large);
+    }
+
+    .post-content :global(h3) {
+      font-size: var(--amber-font-size-medium);
+    }
+
+    .post-content :global(blockquote) {
+      padding-left: var(--amber-spacing-medium);
+    }
+
+    .post-content :global(ul),
+    .post-content :global(ol) {
+      padding-left: var(--amber-spacing-medium);
+    }
+  }
 </style>
